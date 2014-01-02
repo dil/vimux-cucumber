@@ -52,8 +52,18 @@ class Cucumber
     end
   end
 
+  def test_root_dir
+    current_file.split('/')[0..-current_file.split('/').reverse.index('features')-2].join('/')
+  end
+
+
   def send_to_vimux(test_command)
-    Vim.command("call VimuxRunCommand(\"clear && #{test_command}\")")
+    cmds = []
+    cmds << "clear"
+    cmds << "cd #{test_root_dir}"
+    cmds << test_command
+
+    Vim.command("call VimuxRunCommand(\"#{cmds.join(' && ')}\")")
   end
 end
 EOF
